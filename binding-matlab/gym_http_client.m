@@ -10,8 +10,10 @@ classdef gym_http_client < handle
         % For more information about using JSON in matlab refer to:
         % http://mathworks.com/help/matlab/ref/webread.html
         % http://mathworks.com/help/matlab/ref/webwrite.html
-        function [resp_data] = get_request(obj, route)            
-            resp_data.observation = '';
+        function [resp_data] = get_request(obj, route)
+            url = [obj.remote_base, route];            
+            options = weboptions('MediaType','application/json');
+            resp_data = webread(url,options);
         end
         
         % Encode a JSON message with data described on "req_data", and
@@ -62,7 +64,7 @@ classdef gym_http_client < handle
         function [resp_data] = env_action_space_info(obj, instance_id)
             route = ['/v1/envs/', instance_id, '/action_space/'];            
             resp_data = obj.get_request(route);
-            resp_data = resp_data.observation;
+            resp_data = resp_data.info;
         end
         
         function [resp_data] = env_observation_space_info(obj, instance_id)

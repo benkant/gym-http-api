@@ -11,6 +11,7 @@ client = gym_http_client(base);
 %% Set up enviroment
 env_id = 'CartPole-v0';
 instance_id = client.env_create(env_id);
+action_space = client.env_action_space_info(instance_id);
 
 %% Run random experiment with monitor
 outdir = 'tmp/random-agent-results';
@@ -25,7 +26,7 @@ done = false;
 for i = 1:episode_count
    obs = client.env_reset(instance_id);
    for j=1:max_steps
-       action = rand();
+       action = randi(action_space.n);
        [ob, reward, done, info] = ...
            client.env_step(instance_id, action, render);
        if done
